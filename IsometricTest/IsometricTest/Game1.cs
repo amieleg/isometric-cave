@@ -17,8 +17,10 @@ public class Game1 : Game
     public Game1()
     {
         _gdm = new GraphicsDeviceManager(this);
+        Tile.InitTileData();
+        Sprite.InitAnimations();
         _world = new World();
-        _player = new Player();
+        _player = new Player(_world);
         _d = new Drawer(this.Window.ClientBounds, _world, _player);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
@@ -44,30 +46,41 @@ public class Game1 : Game
 
         var state = Keyboard.GetState();
 
+        Vector3 Direction = new Vector3();
+
         if (state.IsKeyDown(Keys.Up))
         {
-            _player._position.Y += PlayerSpeed;
+            Direction.Y -= PlayerSpeed;
         }
         if (state.IsKeyDown(Keys.Down))
         {
-            _player._position.Y -= PlayerSpeed;
+            Direction.Y += PlayerSpeed;
         }
         if (state.IsKeyDown(Keys.Left))
         {
-            _player._position.X -= PlayerSpeed;
+            Direction.X -= PlayerSpeed;
         }
         if (state.IsKeyDown(Keys.Right))
         {
-            _player._position.X += PlayerSpeed;
+            Direction.X += PlayerSpeed;
         }
         if (state.IsKeyDown(Keys.Space))
         {
-            _player._position.Z += PlayerSpeed;
+            Direction.Z += PlayerSpeed;
         }
         if (state.IsKeyDown(Keys.RightShift))
         {
-            _player._position.Z -= PlayerSpeed;
+            Direction.Z -= PlayerSpeed;
         }
+        if (state.IsKeyDown(Keys.T))
+        {
+            _player.Twirl(gameTime);
+        }
+        if (state.IsKeyDown(Keys.N))
+        {
+            _player.Nod(gameTime);
+        }
+        _player.Move(Direction);
 
         base.Update(gameTime);
     }
@@ -76,7 +89,7 @@ public class Game1 : Game
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
-        Debug.WriteLine(gameTime.ElapsedGameTime);
+        //Debug.WriteLine(gameTime.IsRunningSlowly);
         // TODO: Add your drawing code here
         _sb.Begin(samplerState:SamplerState.PointClamp);
 
