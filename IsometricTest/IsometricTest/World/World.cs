@@ -34,10 +34,10 @@ public class World
 
     public void GenerateOne()
     {
-        WorldData[1, 32, 32] = TileType.StoneDirt;
+        WorldData[0, 32, 32] = TileType.StoneDirt;
     }
 
-    public bool CanMoveTo(Vector3 Position)
+    /*public bool CanMoveTo(Vector3 Position)
     {
         int X = (int)Position.X;
         int Y = (int)Position.Y;
@@ -59,5 +59,6 @@ public class World
             return false;
         }
         
-    }
+    }*/
+
 }
