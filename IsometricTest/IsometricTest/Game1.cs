@@ -8,81 +8,97 @@ namespace IsometricTest;
 public class Game1 : Game
 {
     private const float PlayerSpeed = 0.05f;
-    private GraphicsDeviceManager _gdm;
-    private SpriteBatch _sb;
-    private Drawer _d;
-    private World _world;
-    private Player _player;
+    private GraphicsDeviceManager _Gdm;
+    private SpriteBatch _Sb;
+    private Drawer _D;
+    private World _World;
+    private Player _Player;
 
     public Game1()
     {
-        _gdm = new GraphicsDeviceManager(this);
-        _world = new World();
-        _player = new Player();
-        _d = new Drawer(this.Window.ClientBounds, _world, _player);
+        _Gdm = new GraphicsDeviceManager(this);
+        Atlas.InitAtlas();
+        _World = new World();
+        _Player = new Player(_World);
+        _D = new Drawer(this.Window.ClientBounds, _World, _Player);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
     }
 
     protected override void Initialize()
     {
-        _world.Generate();
+        _World.GenerateOne();
         base.Initialize();
     }
 
     protected override void LoadContent()
     {
-        _d.Load(this.Content.Load<Texture2D>("Images/blocksprites.png"));
+        _D.Load(this.Content.Load<Texture2D>("Images/blocksprites.png"));
 
-        _sb = new SpriteBatch(GraphicsDevice);
+        _Sb = new SpriteBatch(GraphicsDevice);
     }
 
-    protected override void Update(GameTime gameTime)
+    protected override void Update(GameTime Gt)
     {
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
         var state = Keyboard.GetState();
 
+        Vector3 Direction = new Vector3();
+
         if (state.IsKeyDown(Keys.Up))
         {
-            _player._position.Y += PlayerSpeed;
+            Direction.Y -= PlayerSpeed;
         }
         if (state.IsKeyDown(Keys.Down))
         {
-            _player._position.Y -= PlayerSpeed;
+            Direction.Y += PlayerSpeed;
         }
         if (state.IsKeyDown(Keys.Left))
         {
-            _player._position.X -= PlayerSpeed;
+            Direction.X -= PlayerSpeed;
         }
         if (state.IsKeyDown(Keys.Right))
         {
-            _player._position.X += PlayerSpeed;
+            Direction.X += PlayerSpeed;
         }
         if (state.IsKeyDown(Keys.Space))
         {
-            _player._position.Z += PlayerSpeed;
+            Direction.Z += PlayerSpeed;
         }
         if (state.IsKeyDown(Keys.RightShift))
         {
-            _player._position.Z -= PlayerSpeed;
+            Direction.Z -= PlayerSpeed;
+        }
+        if (state.IsKeyDown(Keys.N))
+        {
+            _Player._Sm.SetState(PlayerState.Nodding);
+        }
+        if (state.IsKeyDown(Keys.T))
+        {
+            _Player._Sm.SetState(PlayerState.Twirling);
         }
 
-        base.Update(gameTime);
+        _Player.Move(Direction);
+
+        Atlas.UpdateTiles(Gt);
+        _Player.Update(Gt);
+
+        base.Update(Gt);
     }
 
     protected override void Draw(GameTime gameTime)
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
-        Debug.WriteLine(gameTime.ElapsedGameTime);
+        //Debug.WriteLine(gameTime.IsRunningSlowly);
         // TODO: Add your drawing code here
-        _sb.Begin(samplerState:SamplerState.PointClamp);
+        _Sb.Begin(samplerState:SamplerState.PointClamp);
 
-        _d.DrawWorld(_sb, gameTime);
+        _D.DrawWorld(_Sb, gameTime);
 
-        _sb.End();
+        _Sb.End();
 
         base.Draw(gameTime);
     }

@@ -62,3 +62,4 @@ C:\Users\amiel\Documents\monogame\isometric-cave\IsometricTest\IsometricTest\obj
 C:\Users\amiel\Documents\monogame\isometric-cave\IsometricTest\IsometricTest\obj\Debug\net8.0\IsometricTest.pdb
 C:\Users\amiel\Documents\monogame\isometric-cave\IsometricTest\IsometricTest\obj\Debug\net8.0\IsometricTest.genruntimeconfig.cache
 C:\Users\amiel\Documents\monogame\isometric-cave\IsometricTest\IsometricTest\obj\Debug\net8.0\ref\IsometricTest.dll
+C:\Users\amiel\Documents\monogame\isometric-cave\IsometricTest\IsometricTest\obj\Debug\net8.0\IsometricTest.sourcelink.json

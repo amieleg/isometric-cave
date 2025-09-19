@@ -1,3 +1,6 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework;
@@ -6,76 +9,90 @@ using Microsoft.Xna.Framework.Input;
 
 public class Drawer
 {
-    private Texture2D _spriteSheet;
+    private Texture2D _SpriteSheet;
 
-    private Rectangle _bounds;
+    private Rectangle _Bounds;
 
-    public const float PixelSize = 4.0f;
-    public const float TileSize = 16.0f;
+    public const int PixelSize = 8;
+    public const int TileSize = 16;
     public const int ViewDistance = 8;
-    private Vector2 _basePoint;
-    private World _world;
-    private Player _player;
-    private SpriteAtlas _spriteAtlas;
-    public Drawer(Rectangle bounds, World world, Player player)
+
+
+    private Vector2 _BasePoint;
+    private World _World;
+    private Player _Player;
+
+    public Drawer(Rectangle Bounds, World World, Player Player)
     {
-        _bounds = bounds;
-        _basePoint = (new Vector2(_bounds.Width, _bounds.Height) * 0.5f) - new Vector2(0, ViewDistance * TileSize * PixelSize * 0.5f);
-        _world = world;
-        _player = player;
-        _spriteAtlas = new SpriteAtlas();
+        _Bounds = Bounds;
+        _BasePoint = (new Vector2(_Bounds.Width, _Bounds.Height) * 0.5f);// - new Vector2(0, ViewDistance * TileSize * PixelSize * 0.5f);
+        _World = World;
+        _Player = Player;
     }
 
     public void Load(Texture2D spriteSheet)
     {
-        _spriteSheet = spriteSheet;
+        _SpriteSheet = spriteSheet;
     }
 
-    public Vector2 ToIsometric(Vector3 location)
+    public Vector2 ToIsometric(Vector3 Location)
     {
-        return _basePoint + (new Vector2(location.X * 0.5f - location.Y * 0.5f, location.X * 0.3125f + location.Y * 0.3125f - location.Z * 0.4375f) * TileSize * PixelSize);
+        Vector3 Difference = Location - _Player._Position;
+        return _BasePoint + (new Vector2(Difference.X * 0.5f - Difference.Y * 0.5f, Difference.X * 0.3125f + Difference.Y * 0.3125f - Difference.Z * 0.4375f) * TileSize * PixelSize);
     }
 
-    public void DrawWorld(SpriteBatch sb, GameTime t)
+    public void DrawWorld(SpriteBatch Sb, GameTime t)
     {
         for (int z = 0; z < World.WorldHeight; z++)
         {
-            for (int y = - ViewDistance; y < ViewDistance; y++)
+            for (int y = -ViewDistance; y < ViewDistance; y++)
             {
-                for (int x = - ViewDistance; x < ViewDistance; x++)
+                for (int x = -ViewDistance; x < ViewDistance; x++)
                 {
-                    Vector3 drawSpot = new Vector3(_player._position.X + x, _player._position.Y + y, z);
-                    drawSpot.Floor();
+                    Vector3 TileToDraw = new Vector3(_Player._Position.X + x, _Player._Position.Y + y, z);
+                    TileToDraw.Floor();
 
-                    Vector3 offset = new Vector3(_player._position.X % 1, _player._position.Y % 1, _player._position.Z);
-
-
-                    if (drawSpot.Z >= 0 && drawSpot.Z < World.WorldHeight && drawSpot.X >= 0 && drawSpot.X < World.WorldSize && drawSpot.Y >= 0 && drawSpot.Y < World.WorldSize)
+                    if (TileToDraw.Z >= 0 && TileToDraw.Z < World.WorldHeight && TileToDraw.X >= 0 && TileToDraw.X < World.WorldSize && TileToDraw.Y >= 0 && TileToDraw.Y < World.WorldSize)
                     {
-                        Draw(sb, _world.WorldData[(int)drawSpot.Z, (int)drawSpot.Y, (int)drawSpot.X], ToIsometric(new Vector3(x + ViewDistance, y + ViewDistance, z) - offset));
+                        DrawTile(Sb, _World.WorldData[(int)TileToDraw.Z, (int)TileToDraw.Y, (int)TileToDraw.X], ToIsometric(TileToDraw), t);
                     }
                 }
             }
         }
+        Draw(Sb, _Player.GetSprite(t), _Player._Effects, ToIsometric(_Player._Position), t);
     }
 
-    public void Draw(SpriteBatch sb, int spriteId, Vector2 location)
+    public void DrawTile(SpriteBatch Sb, TileType Type, Vector2 Location, GameTime Gt)
     {
-        Rectangle region = Rectangle.Empty;
-
-        if (spriteId != 0)
+        if (Type != TileType.Empty)
         {
-            sb.Draw(
-                _spriteSheet,
-                location,
-                _spriteAtlas.GetRegion(spriteId),
+            Sb.Draw(
+                _SpriteSheet,
+                Location,
+                Atlas.Tiles[Type].GetRegion(),
                 Color.White,
                 0.0f,
-                new Vector2(TileSize / 2.0f, 0),
+                new Vector2(TileSize / 2.0f , 0),
                 PixelSize,
                 SpriteEffects.None,
                 0.0f
                 );
         }
+    }
+    
+    public void Draw(SpriteBatch Sb, Sprite Sprite, SpriteEffects Effects, Vector2 Location, GameTime Gt)
+    {
+        Sb.Draw(
+            _SpriteSheet,
+            Location,
+            Sprite.GetRegion(),
+            Color.White,
+            0.0f,
+            new Vector2(TileSize / 2.0f, TileSize / 2.0f),
+            PixelSize,
+            Effects,
+            0.0f
+            );
+
     }
 }

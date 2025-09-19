@@ -1,0 +1,18 @@
+!1. Rewrite sprite to use interface 
+!2. States and sprites for kitty
+!3. Rewrite Tile to update a whole tiletype at a time
+4. Rewrite world rendering:
+
+0-1-2-3
+|t|t
+1-+
+|t
+2
+|
+3
+
+(Fully rewrite World and Graphics)
+
+5. Hit detection using cuboids
+6. World of chunks
+7. Debug menu
