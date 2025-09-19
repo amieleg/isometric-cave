@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("IsometricTest")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5e01bbddc64047999acf256f8d32abd796312d36")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6fb0096676fd84c7d5b30ad49fe30d1fdcb12932")]
 [assembly: System.Reflection.AssemblyProductAttribute("IsometricTest")]
 [assembly: System.Reflection.AssemblyTitleAttribute("IsometricTest")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

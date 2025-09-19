@@ -13,7 +13,7 @@ public class Drawer
 
     private Rectangle _Bounds;
 
-    public const int PixelSize = 4;
+    public const int PixelSize = 8;
     public const int TileSize = 16;
     public const int ViewDistance = 8;
 
@@ -59,7 +59,7 @@ public class Drawer
                 }
             }
         }
-        Draw(Sb, _Player.GetSprite(t), ToIsometric(_Player._Position), t);
+        Draw(Sb, _Player.GetSprite(t), _Player._Effects, ToIsometric(_Player._Position), t);
     }
 
     public void DrawTile(SpriteBatch Sb, TileType Type, Vector2 Location, GameTime Gt)
@@ -80,7 +80,7 @@ public class Drawer
         }
     }
     
-    public void Draw(SpriteBatch Sb, Sprite Sprite, Vector2 Location, GameTime Gt)
+    public void Draw(SpriteBatch Sb, Sprite Sprite, SpriteEffects Effects, Vector2 Location, GameTime Gt)
     {
         Sb.Draw(
             _SpriteSheet,
@@ -90,7 +90,7 @@ public class Drawer
             0.0f,
             new Vector2(TileSize / 2.0f, TileSize / 2.0f),
             PixelSize,
-            SpriteEffects.None,
+            Effects,
             0.0f
             );
 

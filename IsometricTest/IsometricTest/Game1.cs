@@ -27,7 +27,7 @@ public class Game1 : Game
 
     protected override void Initialize()
     {
-        _World.Generate();
+        _World.GenerateOne();
         base.Initialize();
     }
 
@@ -73,11 +73,11 @@ public class Game1 : Game
         }
         if (state.IsKeyDown(Keys.N))
         {
-            _Player.Nod();
+            _Player._Sm.SetState(PlayerState.Nodding);
         }
         if (state.IsKeyDown(Keys.T))
         {
-            _Player.Twirl();
+            _Player._Sm.SetState(PlayerState.Twirling);
         }
 
         _Player.Move(Direction);

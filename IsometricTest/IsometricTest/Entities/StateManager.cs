@@ -1,30 +1,41 @@
 using System;
+using System.Reflection.Metadata;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
-public class StateManager<T>
+public class StateManager<TState, T> where TState : System.Enum
 {
-    public T _CurrentState;
-    public T _OldState;
+    public TState _LastState;
+    public TState _CurrentState;
+    public T _Entity;
 
-    public void ChangeState(T NewState)
+    public StateTransitionDefinition<TState, T> _Definition;
+
+    public StateManager(StateTransitionDefinition<TState, T> Definition, T Entity, TState StartState1, TState StartState2)
     {
-        _OldState = _CurrentState;
+        _LastState = StartState1;
+        _CurrentState = StartState2;
+        _Entity = Entity;
+        _Definition = Definition;
+    }
+
+
+    public void SetState(TState NewState)
+    {
         _CurrentState = NewState;
-    }
-
-    public void ActionInit(T State, Action<GameTime> Function)
-    {
-
-    }
-
-    public void ActionUpdate(T State, Action<GameTime> Function)
-    {
-
     }
 
     public void Update(GameTime Gt)
     {
-        
+        Action<T, GameTime> Action;
+        if (_Definition.TryGetAction(_LastState, _CurrentState, out Action))
+        {
+            _LastState = _CurrentState;
+            Action.Invoke(_Entity, Gt);
+        }
+        else
+        {
+            _LastState = _CurrentState;
+        }
     }
-
 }
