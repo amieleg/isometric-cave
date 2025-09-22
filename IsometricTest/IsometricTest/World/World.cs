@@ -19,14 +19,32 @@ public class World
     {
         Random rand = new Random();
 
-        for (int z = 0; z < WorldHeight; z++)
+        for (int z = 0; z < WorldHeight / 2.0f; z++)
         {
             for (int y = 0; y < WorldSize; y++)
             {
                 for (int x = 0; x < WorldSize; x++)
                 {
                     int tile = rand.Next(0, 5);
+
                     WorldData[z, y, x] = (TileType)tile;
+                }
+            }
+        }
+    }
+
+    public void GenerateCycle()
+    {
+        int i = 0;
+        for (int z = 0; z < WorldHeight / 2.0f; z++)
+        {
+            for (int y = 0; y < WorldSize; y++)
+            {
+                for (int x = 0; x < WorldSize; x++)
+                {
+                    i = (i + 1) % 6;
+
+                    WorldData[z, y, x] = (TileType)i;
                 }
             }
         }
@@ -34,31 +52,29 @@ public class World
 
     public void GenerateOne()
     {
-        WorldData[0, 32, 32] = TileType.StoneDirt;
+        WorldData[2, 32, 32] = TileType.StoneDirt;
     }
 
-    /*public bool CanMoveTo(Vector3 Position)
+    public bool CanMoveTo(Cuboid HitBox, Vector3 Position)
     {
-        int X = (int)Position.X;
-        int Y = (int)Position.Y;
-        int Z = (int)Position.Z;
-
-        if (X < 0 || X >= WorldSize || Y < 0 || Y >= WorldSize || Z < 0 || Z >= WorldHeight)
+        Vector3 Back = Position - new Vector3(HitBox._Width, HitBox._Height, HitBox._Depth) * 0.5f;
+        Vector3 Front = Position + new Vector3(HitBox._Width, HitBox._Height, HitBox._Depth) * 0.5f;
+        for (int z = (int)Back.Z; z <= (int)Front.Z; z++)
         {
-            return true;
+            for (int y = (int)Back.Y; y <= (int)Front.Y; y++)
+            {
+                for (int x = (int)Back.X; x <= (int)Front.X; x++)
+                {
+                    if (z >= 0 && z < WorldHeight && y >= 0 && y < WorldSize && x >= 0 && x < WorldSize)
+                    {
+                        if (WorldData[z, y, x] != TileType.Empty)
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
         }
-
-        //Debug.WriteLine(X + " " + Y + " " + Z);
-
-        if (WorldData[Z, Y, X] == TileType.Empty)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-        
-    }*/
-
+        return true;
+    }
 }

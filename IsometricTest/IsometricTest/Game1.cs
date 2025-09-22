@@ -27,7 +27,7 @@ public class Game1 : Game
 
     protected override void Initialize()
     {
-        _World.GenerateOne();
+        _World.Generate();
         base.Initialize();
     }
 
@@ -79,6 +79,14 @@ public class Game1 : Game
         {
             _Player._Sm.SetState(PlayerState.Twirling);
         }
+        if (state.IsKeyDown(Keys.C))
+        {
+            _Player._NoClip = true;
+        }
+        if (state.IsKeyDown(Keys.X))
+        {
+            _Player._NoClip = false;
+        }
 
         _Player.Move(Direction);
 
@@ -92,8 +100,6 @@ public class Game1 : Game
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
-        //Debug.WriteLine(gameTime.IsRunningSlowly);
-        // TODO: Add your drawing code here
         _Sb.Begin(samplerState:SamplerState.PointClamp);
 
         _D.DrawWorld(_Sb, gameTime);

@@ -21,6 +21,7 @@ public class Drawer
     private Vector2 _BasePoint;
     private World _World;
     private Player _Player;
+    private LinkedList<Entity> _Entities = new LinkedList<Entity>();
 
     public Drawer(Rectangle Bounds, World World, Player Player)
     {
@@ -28,6 +29,7 @@ public class Drawer
         _BasePoint = (new Vector2(_Bounds.Width, _Bounds.Height) * 0.5f);// - new Vector2(0, ViewDistance * TileSize * PixelSize * 0.5f);
         _World = World;
         _Player = Player;
+        _Entities.AddFirst(_Player);
     }
 
     public void Load(Texture2D spriteSheet)
@@ -41,8 +43,14 @@ public class Drawer
         return _BasePoint + (new Vector2(Difference.X * 0.5f - Difference.Y * 0.5f, Difference.X * 0.3125f + Difference.Y * 0.3125f - Difference.Z * 0.4375f) * TileSize * PixelSize);
     }
 
-    public void DrawWorld(SpriteBatch Sb, GameTime t)
+    public void DrawWorld(SpriteBatch Sb, GameTime Gt)
     {
+        LinkedListNode<Entity> CurrentNode = _Entities.First;
+        Entity CurrentEntity = CurrentNode.Value;
+        Vector3 Pos = CurrentEntity._HitBox.FrontestPoint();
+        Pos.Floor();
+
+        
         for (int z = 0; z < World.WorldHeight; z++)
         {
             for (int y = -ViewDistance; y < ViewDistance; y++)
@@ -52,14 +60,25 @@ public class Drawer
                     Vector3 TileToDraw = new Vector3(_Player._Position.X + x, _Player._Position.Y + y, z);
                     TileToDraw.Floor();
 
+                    while (TileToDraw == Pos && CurrentNode != null)
+                    {
+                        Draw(Sb, CurrentEntity.GetSprite(Gt), CurrentEntity.GetEffects(), ToIsometric(CurrentEntity._Position), Gt);
+                        CurrentNode = CurrentNode.Next;
+                        if (CurrentNode != null)
+                        {
+                            CurrentEntity = CurrentNode.Value;
+                            Pos = CurrentEntity._HitBox.FrontestPoint();
+                            Pos.Floor();
+                        }
+                    }
+
                     if (TileToDraw.Z >= 0 && TileToDraw.Z < World.WorldHeight && TileToDraw.X >= 0 && TileToDraw.X < World.WorldSize && TileToDraw.Y >= 0 && TileToDraw.Y < World.WorldSize)
                     {
-                        DrawTile(Sb, _World.WorldData[(int)TileToDraw.Z, (int)TileToDraw.Y, (int)TileToDraw.X], ToIsometric(TileToDraw), t);
+                        DrawTile(Sb, _World.WorldData[(int)TileToDraw.Z, (int)TileToDraw.Y, (int)TileToDraw.X], ToIsometric(TileToDraw + new Vector3(0.5f, 0.5f, 0.5f)), Gt);
                     }
                 }
             }
         }
-        Draw(Sb, _Player.GetSprite(t), _Player._Effects, ToIsometric(_Player._Position), t);
     }
 
     public void DrawTile(SpriteBatch Sb, TileType Type, Vector2 Location, GameTime Gt)
@@ -72,7 +91,7 @@ public class Drawer
                 Atlas.Tiles[Type].GetRegion(),
                 Color.White,
                 0.0f,
-                new Vector2(TileSize / 2.0f , 0),
+                new Vector2(TileSize / 2.0f , TileSize / 2.0f),
                 PixelSize,
                 SpriteEffects.None,
                 0.0f

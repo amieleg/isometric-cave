@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Dynamic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 public class Cuboid
 {
@@ -41,6 +42,16 @@ public class Cuboid
         _Height = Size;
         _Depth = Size;
         _Location = Vector3.Zero;
+    }
+
+    public Vector3 BackestPoint()
+    {
+        return _Location - (new Vector3(_Width, _Depth, _Height) * 0.5f);
+    }
+
+    public Vector3 FrontestPoint()
+    {
+        return _Location + (new Vector3(_Width, _Depth, _Height) * 0.5f);
     }
 
     public bool Collides(Cuboid Other)
