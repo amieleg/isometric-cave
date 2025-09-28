@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Security.Cryptography.X509Certificates;
@@ -8,16 +9,22 @@ public class World
 {
     public const int WorldSize = 64;
     public const int WorldHeight = 8;
-    public TileType[,,] WorldData;
+    public TileType[,,] _WorldData;
+    public List<Entity> _Entities = new List<Entity>();
 
     public World()
     {
-        WorldData = new TileType[WorldHeight, WorldSize, WorldSize];
+        _WorldData = new TileType[WorldHeight, WorldSize, WorldSize];
+    }
+
+    public void AddEntity(Entity E)
+    {
+        _Entities.Add(E);
     }
 
     public void Generate()
     {
-        Random rand = new Random();
+        Random Rand = new Random();
 
         for (int z = 0; z < WorldHeight / 2.0f; z++)
         {
@@ -25,9 +32,9 @@ public class World
             {
                 for (int x = 0; x < WorldSize; x++)
                 {
-                    int tile = rand.Next(0, 5);
+                    int Tile = Rand.Next(0, 5);
 
-                    WorldData[z, y, x] = (TileType)tile;
+                    _WorldData[z, y, x] = (TileType)Tile;
                 }
             }
         }
@@ -44,7 +51,7 @@ public class World
                 {
                     i = (i + 1) % 6;
 
-                    WorldData[z, y, x] = (TileType)i;
+                    _WorldData[z, y, x] = (TileType)i;
                 }
             }
         }
@@ -52,7 +59,7 @@ public class World
 
     public void GenerateOne()
     {
-        WorldData[2, 32, 32] = TileType.StoneDirt;
+        _WorldData[2, 32, 32] = TileType.StoneDirt;
     }
 
     public bool CanMoveTo(Cuboid HitBox, Vector3 Position)
@@ -67,7 +74,7 @@ public class World
                 {
                     if (z >= 0 && z < WorldHeight && y >= 0 && y < WorldSize && x >= 0 && x < WorldSize)
                     {
-                        if (WorldData[z, y, x] != TileType.Empty)
+                        if (_WorldData[z, y, x] != TileType.Empty)
                         {
                             return false;
                         }

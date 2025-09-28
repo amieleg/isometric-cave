@@ -47,7 +47,7 @@ public class Player : Entity
     public void Move(Vector3 Direction)
     {
         Vector3 NewPosition = _Position + Direction - new Vector3(0.0f, 0.0f, 0.2f);
-        Debug.WriteLine(NewPosition);
+        //Debug.WriteLine(NewPosition);
 
         if (Direction.X > 0 || Direction.Y < 0)
         {
@@ -64,9 +64,14 @@ public class Player : Entity
 
         if (_World.CanMoveTo(_HitBox, NewPosition) || _NoClip)
         {
-            _Position = NewPosition + new Vector3(0.0f,0.0f,0.2f);
+            _Position = NewPosition + new Vector3(0.0f, 0.0f, 0.2f);
             _HitBox._Location = NewPosition;
         }
+    }
+
+    public void SpawnKitten()
+    {
+        _World.AddEntity(new StaticEntity(new StaticSprite("kitty"), new Vector3(_Position.X, _Position.Y, _Position.Z), _World));
     }
 
     public override void Update(GameTime Gt)

@@ -44,14 +44,24 @@ public class Cuboid
         _Location = Vector3.Zero;
     }
 
-    public Vector3 BackestPoint()
+    public Vector3 BackLeftDown()
     {
         return _Location - (new Vector3(_Width, _Depth, _Height) * 0.5f);
     }
 
-    public Vector3 FrontestPoint()
+    public Vector3 FrontRightUp()
     {
         return _Location + (new Vector3(_Width, _Depth, _Height) * 0.5f);
+    }
+
+    public Vector3 BackRightDown()
+    {
+        return _Location - (new Vector3(-_Width, _Depth, _Height) * 0.5f);
+    }
+
+    public Vector3 FrontLeftUp()
+    {
+        return _Location + (new Vector3(-_Width, _Depth, _Height) * 0.5f);
     }
 
     public bool Collides(Cuboid Other)
