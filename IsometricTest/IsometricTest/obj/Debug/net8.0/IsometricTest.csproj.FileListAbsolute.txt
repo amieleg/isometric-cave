@@ -42,9 +42,6 @@ C:\Users\amiel\Documents\monogame\isometric-cave\IsometricTest\IsometricTest\bin
 C:\Users\amiel\Documents\monogame\isometric-cave\IsometricTest\IsometricTest\bin\Debug\net8.0\runtimes\android-arm64\native\libopenal.so
 C:\Users\amiel\Documents\monogame\isometric-cave\IsometricTest\IsometricTest\bin\Debug\net8.0\runtimes\android-x64\native\libopenal.so
 C:\Users\amiel\Documents\monogame\isometric-cave\IsometricTest\IsometricTest\bin\Debug\net8.0\runtimes\android-x86\native\libopenal.so
-C:\Users\amiel\Documents\monogame\isometric-cave\IsometricTest\IsometricTest\bin\Debug\net8.0\runtimes\ios-arm64\native\libopenal.dylib
-C:\Users\amiel\Documents\monogame\isometric-cave\IsometricTest\IsometricTest\bin\Debug\net8.0\runtimes\iossimulator-arm64\native\libopenal.dylib
-C:\Users\amiel\Documents\monogame\isometric-cave\IsometricTest\IsometricTest\bin\Debug\net8.0\runtimes\iossimulator-x64\native\libopenal.dylib
 C:\Users\amiel\Documents\monogame\isometric-cave\IsometricTest\IsometricTest\bin\Debug\net8.0\runtimes\linux-x64\native\libopenal.so
 C:\Users\amiel\Documents\monogame\isometric-cave\IsometricTest\IsometricTest\bin\Debug\net8.0\runtimes\osx\native\libopenal.dylib
 C:\Users\amiel\Documents\monogame\isometric-cave\IsometricTest\IsometricTest\bin\Debug\net8.0\runtimes\win-x64\native\openal.dll
@@ -63,3 +60,8 @@ C:\Users\amiel\Documents\monogame\isometric-cave\IsometricTest\IsometricTest\obj
 C:\Users\amiel\Documents\monogame\isometric-cave\IsometricTest\IsometricTest\obj\Debug\net8.0\IsometricTest.genruntimeconfig.cache
 C:\Users\amiel\Documents\monogame\isometric-cave\IsometricTest\IsometricTest\obj\Debug\net8.0\ref\IsometricTest.dll
 C:\Users\amiel\Documents\monogame\isometric-cave\IsometricTest\IsometricTest\obj\Debug\net8.0\IsometricTest.sourcelink.json
+C:\Users\amiel\Documents\monogame\isometric-cave\IsometricTest\IsometricTest\bin\Debug\net8.0\runtimes\ios-arm64\native\libopenal.a
+C:\Users\amiel\Documents\monogame\isometric-cave\IsometricTest\IsometricTest\bin\Debug\net8.0\runtimes\iossimulator-arm64\native\libopenal.a
+C:\Users\amiel\Documents\monogame\isometric-cave\IsometricTest\IsometricTest\bin\Debug\net8.0\runtimes\iossimulator-x64\native\libopenal.a
+C:\Users\amiel\Documents\monogame\isometric-cave\IsometricTest\IsometricTest\bin\Debug\net8.0\runtimes\linux-arm64\native\libopenal.so
+C:\Users\amiel\Documents\monogame\isometric-cave\IsometricTest\IsometricTest\obj\Debug\net8.0\mgcb.tool.restore

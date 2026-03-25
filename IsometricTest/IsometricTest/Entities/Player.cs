@@ -19,12 +19,10 @@ public enum PlayerState
 
 public class Player : Entity
 {
-    public Vector3 _Position;
-    public World _World;
-    public Cuboid _HitBox;
     public Sprite _Sprite = new StaticSprite("kitty");
     public SpriteEffects _Effects = SpriteEffects.None;
     public StateManager<PlayerState, Player> _Sm;
+    public bool _NoClip = false;
 
     private static StateTransitionDefinition<PlayerState, Player> _Def;
 
@@ -40,18 +38,16 @@ public class Player : Entity
     }
 
 
-    public Player(World World)
+    public Player(World World) : base(new Vector3(32.5f, 32.5f, World.WorldHeight - 1), new Cuboid(0.8f, new Vector3(32.5f, 32.5f, 3.3f)), World)
     {
-        _Position = new Vector3(32.5f, 32.5f, 0.5f);
-        _HitBox = new Cuboid(0.8f, _Position);
-        _World = World;
         _Sm = new StateManager<PlayerState, Player>(_Def, this, PlayerState.None, PlayerState.None);
     }
 
 
     public void Move(Vector3 Direction)
     {
-        Vector3 NewPosition = _Position + Direction;
+        Vector3 NewPosition = _Position + Direction - new Vector3(0.0f, 0.0f, 0.2f);
+        //Debug.WriteLine(NewPosition);
 
         if (Direction.X > 0 || Direction.Y < 0)
         {
@@ -66,17 +62,31 @@ public class Player : Entity
             _Sm.SetState(PlayerState.None);
         }
 
-        _Position += Direction;
+        if (_World.CanMoveTo(_HitBox, NewPosition) || _NoClip)
+        {
+            _Position = NewPosition + new Vector3(0.0f, 0.0f, 0.2f);
+            _HitBox._Location = NewPosition;
+        }
     }
 
-    public void Update(GameTime Gt)
+    public void SpawnKitten()
+    {
+        _World.AddEntity(new StaticEntity(new StaticSprite("kitty"), new Vector3(_Position.X, _Position.Y, _Position.Z), _World));
+    }
+
+    public override void Update(GameTime Gt)
     {
         _Sm.Update(Gt);
     }
 
-    public Sprite GetSprite(GameTime Gt)
+    public override Sprite GetSprite(GameTime Gt)
     {
         _Sprite.Update(Gt);
         return _Sprite;
+    }
+
+    public override SpriteEffects GetEffects()
+    {
+        return _Effects;
     }
 }

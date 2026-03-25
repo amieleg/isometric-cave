@@ -13,6 +13,7 @@
 
 (Fully rewrite World and Graphics)
 
-5. Hit detection using cuboids
-6. World of chunks
-7. Debug menu
+5. Rewrite Input
+6. Hit detection using cuboids
+7. World of chunks
+8. Debug menu

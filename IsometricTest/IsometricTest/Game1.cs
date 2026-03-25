@@ -13,6 +13,7 @@ public class Game1 : Game
     private Drawer _D;
     private World _World;
     private Player _Player;
+    private InputManager _Im;
 
     public Game1()
     {
@@ -20,6 +21,7 @@ public class Game1 : Game
         Atlas.InitAtlas();
         _World = new World();
         _Player = new Player(_World);
+        _Im = new InputManager();
         _D = new Drawer(this.Window.ClientBounds, _World, _Player);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
@@ -27,7 +29,8 @@ public class Game1 : Game
 
     protected override void Initialize()
     {
-        _World.GenerateOne();
+        _World.Generate();
+        _World.AddEntity(_Player);
         base.Initialize();
     }
 
@@ -44,6 +47,8 @@ public class Game1 : Game
             Exit();
 
         var state = Keyboard.GetState();
+
+        _Im.Update(state);
 
         Vector3 Direction = new Vector3();
 
@@ -79,6 +84,19 @@ public class Game1 : Game
         {
             _Player._Sm.SetState(PlayerState.Twirling);
         }
+        if (state.IsKeyDown(Keys.C))
+        {
+            _Player._NoClip = true;
+        }
+        if (state.IsKeyDown(Keys.X))
+        {
+            _Player._NoClip = false;
+        }
+        if (_Im.WasPressed(Keys.K))
+        {
+            _Player.SpawnKitten();
+        }
+
 
         _Player.Move(Direction);
 
@@ -92,8 +110,6 @@ public class Game1 : Game
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
-        //Debug.WriteLine(gameTime.IsRunningSlowly);
-        // TODO: Add your drawing code here
         _Sb.Begin(samplerState:SamplerState.PointClamp);
 
         _D.DrawWorld(_Sb, gameTime);

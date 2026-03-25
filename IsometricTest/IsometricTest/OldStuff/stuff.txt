@@ -1,0 +1,101 @@
+    public void DrawWorld(SpriteBatch Sb, GameTime Gt, (int, int, int) StartPoint, (int, int, int) EndPoint, bool FirstLineDone)
+    {
+        if (FirstLineDone)
+        {
+            StartPoint.Item2 += 1;
+        }
+        if (false)
+        {
+
+        }
+        else
+        {
+            for (int z = (int)StartPoint.Item1; z <= (int)EndPoint.Item1; z++)
+            {
+                for (int y = (int)StartPoint.Item2; y <= (int)EndPoint.Item2; y++)
+                {
+                    for (int x = (int)StartPoint.Item3; x <= (int)EndPoint.Item3; x++)
+                    {
+                        Vector3 TileToDraw = new Vector3(x + _Player._Position.X - ViewDistance, y + _Player._Position.Y - ViewDistance, z);
+                        int Encounter = _RoughPositions[z, y, x];
+                        if (Encounter == 0)
+                        {
+                            DrawTile(Sb, _World.WorldData[(int)TileToDraw.Z, (int)TileToDraw.Y, (int)TileToDraw.X], ToIsometric(TileToDraw + new Vector3(0.5f, 0.5f, 0.5f)), Gt);
+                        }
+                        else if (Encounter != 0)
+                        {
+                            
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+        public Rectangle ReduceArea(Rectangle R)
+    {
+        Rectangle Region = GetRegion();
+        int CutTop = R.Y - Region.Y;
+        int CutLeft = R.X - Region.X;
+        int CutBot = (R.Y + R.Height) - (Region.Y + Region.Height);
+        int CutRight = (R.X + R.Width) - (Region.X + Region.Width);
+        return new Rectangle(R.X + CutLeft, R.Y + CutTop, R.Width - CutLeft - CutRight, R.Height - CutTop - CutBot);
+    }
+
+    public List<Rectangle> AsParts(int OffsetX, int OffSetY)
+    {
+        Rectangle Region = GetRegion();
+        if (OffsetX == 0 && OffSetY == 0)
+        {
+            return [Region];
+        }
+        else
+        {
+            Rectangle Base = new Rectangle(Region.X - OffsetX, Region.Y - OffSetY, Region.Width, Region.Height);
+            Rectangle R2 = new Rectangle(Base.X + (Region.Width / 2), Base.Y + (Region.Height / 4), Region.Width, Region.Height);
+            Rectangle R3 = new Rectangle(Base.X - (Region.Width / 2), Base.Y + (Region.Height / 4), Region.Width, Region.Height);
+            Rectangle R4 = new Rectangle(Base.X, Base.Y + (Region.Height / 2), Region.Width, Region.Height);
+            return [ReduceArea(Base), ReduceArea(R2), ReduceArea(R3), ReduceArea(R4)];
+        }
+    }
+
+
+
+    public void DrawWorldOld(SpriteBatch Sb, GameTime Gt)
+    {
+        LinkedListNode<Entity> CurrentNode = _Entities.First;
+        Entity CurrentEntity = CurrentNode.Value;
+        Vector3 Pos = CurrentEntity._HitBox.FrontRightUp();
+        Pos.Floor();
+
+
+        for (int z = 0; z < World.WorldHeight; z++)
+        {
+            for (int y = -ViewDistance; y < ViewDistance; y++)
+            {
+                for (int x = -ViewDistance; x < ViewDistance; x++)
+                {
+                    Vector3 TileToDraw = new Vector3(_Player._Position.X + x, _Player._Position.Y + y, z);
+                    TileToDraw.Floor();
+
+                    while (TileToDraw == Pos && CurrentNode != null)
+                    {
+                        Draw(Sb, CurrentEntity.GetSprite(Gt), CurrentEntity.GetEffects(), ToIsometric(CurrentEntity._Position), Gt);
+
+                        CurrentNode = CurrentNode.Next;
+                        if (CurrentNode != null)
+                        {
+                            CurrentEntity = CurrentNode.Value;
+                            Pos = CurrentEntity._HitBox.FrontRightUp();
+                            Pos.Floor();
+                        }
+                    }
+
+                    if (TileToDraw.Z >= 0 && TileToDraw.Z < World.WorldHeight && TileToDraw.X >= 0 && TileToDraw.X < World.WorldSize && TileToDraw.Y >= 0 && TileToDraw.Y < World.WorldSize)
+                    {
+                        DrawTile(Sb, _World.WorldData[(int)TileToDraw.Z, (int)TileToDraw.Y, (int)TileToDraw.X], ToIsometric(TileToDraw + new Vector3(0.5f, 0.5f, 0.5f)), Gt);
+                    }
+                }
+            }
+        }
+    }
